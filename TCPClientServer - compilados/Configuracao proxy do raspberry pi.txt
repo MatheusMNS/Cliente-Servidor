@@ -1,0 +1,33 @@
+https://raspberrypi.stackexchange.com/questions/68580/how-do-i-set-proxy-in-raspberry-pi-raspbian-os-or-any-linux-using-command-li
+--------------------------------------------------------------------------------
+For apt:
+Navigate to the following folder as follows:
+
+cd /etc/apt/apt.conf.d
+
+Create a file called 10proxy:
+
+sudo nano 10proxy
+
+Without authentication add this line:
+
+Acquire::http::Proxy "http://proxyaddress:proxyport/";
+
+Or with authentication add this line:
+
+Acquire::http::Proxy "http://username:password@proxyaddress:proxyport/";
+
+Make sure to include the / at the end.
+--------------------------------------------------------------------------------
+For everything else:
+Edit this file:
+
+sudo nano /etc/environment
+
+Add this line (with authentication):
+
+export http_proxy="http://username:password@proxyaddress:port/"
+
+Or without authentication:
+
+export http_proxy="http://proxyaddress:port/"
