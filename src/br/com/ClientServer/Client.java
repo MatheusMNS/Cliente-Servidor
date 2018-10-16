@@ -14,6 +14,9 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.net.UnknownHostException;
+import java.security.*;
+import java.security.NoSuchAlgorithmException;
+import java.util.Base64;
 
 /**
  *
@@ -21,7 +24,7 @@ import java.net.UnknownHostException;
  */
 public class Client {
 
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) throws IOException, NoSuchAlgorithmException {
         /*
         if (args.length != 2) {
             System.err.println(
@@ -31,22 +34,28 @@ public class Client {
 
         String hostName = args[0];
         int portNumber = Integer.parseInt(args[1]);
-         */
+         
 
-        /*
+        
         String servidorNome = "localhost";
         int porta = 4444;
         */
-        
+        /*
         if (args.length != 2) {
             System.err.println("Usage: java EchoClient <host name> <port number>");
             System.exit(1);
         }
         
+        
         String servidorNome = args[0];
         int porta = Integer.parseInt(args[1]);
+        */
+        String servidorNome = "localhost";
+        int porta = 4444;
+        
         long start;
         long elapsed;
+        byte[] msgCifrada;
         
         //for (int i = 0; i < 100; i++) {
             
@@ -58,9 +67,10 @@ public class Client {
 
                 BufferedReader brEntrada = new BufferedReader(new InputStreamReader(System.in));
                 String servidorMsg = "Conexão Estabelecida";
-                String usuarioMsg = "Animal na pista.";
+                String usuarioMsg = "123";
+                //msgCifrada = hash(usuarioMsg);
 
-                System.out.println("\nEnviando Mensagem: "+usuarioMsg);
+                System.out.println("\nEnviando Mensagem: "+usuarioMsg.toString());
                 //usuarioMsg = brEntrada.readLine();
                 out.println(usuarioMsg);
                 //usuarioMsg = "" + i;
@@ -107,7 +117,14 @@ public class Client {
             }
     
         
-
+        
+    }
+    
+    public static byte[] hash(String password) throws NoSuchAlgorithmException {
+        MessageDigest sha256 = MessageDigest.getInstance("SHA-256");        
+        byte[] passBytes = password.getBytes();
+        byte[] passHash = sha256.digest(passBytes);
+        return passHash;
     }
 }
     

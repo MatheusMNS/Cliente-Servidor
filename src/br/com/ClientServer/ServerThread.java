@@ -47,15 +47,15 @@ public class ServerThread extends Thread {
             usuarioMsg = in.readLine();
             System.out.println("\nMensagem do usuário: "+usuarioMsg);
             out.println(servidorMsg);
-            /*ConexaoMySQL con = new ConexaoMySQL(_clienteEnd, "gato");
+            ConexaoMySQL con = new ConexaoMySQL(_clienteEnd, "gato");
             
-            if(con.conexaoMySQL()){
+            if(con.buscaSenha(usuarioMsg)){
                 out.println("OK");
             }
             else{
                 out.println("ERRO");
             }
-            */
+            
                         
             // Este while recebe vários dados do cliente enquanto estiverem conectados
             /* 

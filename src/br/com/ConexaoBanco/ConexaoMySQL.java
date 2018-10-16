@@ -7,6 +7,8 @@ package br.com.ConexaoBanco;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Date;
@@ -25,6 +27,46 @@ public class ConexaoMySQL {
         _host = host;
         _animalDetectado = animalDetectado;
         _data = new Date();
+    }
+    
+    public boolean buscaSenha(String senha){
+        Connection connection = null;
+        
+        try {
+            String driverName = "com.mysql.jdbc.Driver";
+            Class.forName(driverName);
+
+            String serverName = "localhost";
+            String mydatabase = "bd_ads";
+            String url = "jdbc:mysql://" + serverName + "/" + mydatabase;
+            String username = "root";
+            String password = "";
+
+            connection = DriverManager.getConnection(url, username, password);
+
+            if (connection != null) {
+                String sql = "SELECT senha FROM equipamentos WHERE senha = ?";
+                PreparedStatement pstm = connection.prepareStatement(sql);
+                pstm.setString(1, senha);
+                ResultSet rs = pstm.executeQuery();
+                while(rs.next()){
+                    System.out.println("Retorno do banco: "+rs.getString(1));
+                    return true;
+                }
+            } else {
+                System.out.println("Conexão com o banco falhou :(");
+                return false;
+            }
+
+        } catch (ClassNotFoundException e) {  //Driver não encontrado
+            System.out.println("O driver expecificado nao foi encontrado.");
+            return false;
+        } catch (SQLException e) {
+            System.out.println("Nao foi possivel conectar ao Banco de Dados.");
+            return false;
+        }
+        
+        return true;
     }
 
     public boolean conexaoMySQL() {

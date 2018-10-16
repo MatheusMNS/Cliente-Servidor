@@ -23,14 +23,15 @@ public class Servidor {
 
         int portNumber = Integer.parseInt(args[0]);
         boolean listening = true;
-         */
+         
         if (args.length != 1) {
             System.err.println("Usage: java KKMultiServer <port number>");
             System.exit(1);
         }
         
         int porta = Integer.parseInt(args[0]);
-        
+        */
+        int porta = 4444;
         System.out.println("Iniciando servidor...\n");
         
         try {
