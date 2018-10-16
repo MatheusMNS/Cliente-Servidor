@@ -46,10 +46,11 @@ public class ServerThread extends Thread {
             
             usuarioMsg = in.readLine();
             System.out.println("\nMensagem do usuário: "+usuarioMsg);
-            out.println(servidorMsg);
-            ConexaoMySQL con = new ConexaoMySQL(_clienteEnd, "gato");
+            String[] parts = usuarioMsg.split(",");
+            //out.println(servidorMsg);
+            ConexaoMySQL con = new ConexaoMySQL(parts[0], parts[1]);
             
-            if(con.buscaSenha(usuarioMsg)){
+            if(con.buscaSenha()){
                 out.println("OK");
             }
             else{

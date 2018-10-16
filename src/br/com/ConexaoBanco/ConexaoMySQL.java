@@ -19,17 +19,15 @@ import java.util.Date;
  */
 public class ConexaoMySQL {
 
-    private String _host;
-    private String _animalDetectado;
-    private Date _data;
+    private String _idEquipamento;
+    private String _senhaEquipamento;
 
-    public ConexaoMySQL(String host, String animalDetectado) {
-        _host = host;
-        _animalDetectado = animalDetectado;
-        _data = new Date();
+    public ConexaoMySQL(String idEquipamento, String senhaEquipamento) {
+        _idEquipamento = idEquipamento;
+        _senhaEquipamento = senhaEquipamento;
     }
     
-    public boolean buscaSenha(String senha){
+    public boolean buscaSenha(){
         Connection connection = null;
         
         try {
@@ -47,11 +45,15 @@ public class ConexaoMySQL {
             if (connection != null) {
                 String sql = "SELECT senha FROM equipamentos WHERE senha = ?";
                 PreparedStatement pstm = connection.prepareStatement(sql);
-                pstm.setString(1, senha);
+                pstm.setString(1, _senhaEquipamento);
                 ResultSet rs = pstm.executeQuery();
                 while(rs.next()){
                     System.out.println("Retorno do banco: "+rs.getString(1));
-                    return true;
+                    if (insereDados(connection)) {
+                        return true;
+                    } else {
+                        return false;
+                    }                    
                 }
             } else {
                 System.out.println("Conexão com o banco falhou :(");
@@ -106,13 +108,10 @@ public class ConexaoMySQL {
     }
 
     public boolean insereDados(Connection connection) {
-        java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        String currentTime = sdf.format(_data);
-
         try {
             System.out.println("Inserindo dados no banco...\n");
             Statement stmt = connection.createStatement();
-            stmt.executeUpdate("insert into relatorio (host, animal_detectado, horario) values ('" + _host + "', '" + _animalDetectado + "', '" + currentTime + "')");
+            stmt.executeUpdate("insert into alertas (id_equipamento) values ('" + _idEquipamento + "')");
             if(fechaConexao(connection)){
                 return true;
             }

@@ -67,7 +67,7 @@ public class Client {
 
                 BufferedReader brEntrada = new BufferedReader(new InputStreamReader(System.in));
                 String servidorMsg = "Conexão Estabelecida";
-                String usuarioMsg = "123";
+                String usuarioMsg = "10,123";
                 //msgCifrada = hash(usuarioMsg);
 
                 System.out.println("\nEnviando Mensagem: "+usuarioMsg.toString());
