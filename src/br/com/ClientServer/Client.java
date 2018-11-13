@@ -5,8 +5,11 @@
  */
 package br.com.ClientServer;
 
+import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -17,6 +20,8 @@ import java.net.UnknownHostException;
 import java.security.*;
 import java.security.NoSuchAlgorithmException;
 import java.util.Base64;
+import javax.imageio.ImageIO;
+import javax.imageio.stream.ImageOutputStream;
 
 /**
  *
@@ -64,7 +69,10 @@ public class Client {
                 Socket socket = new Socket(servidorNome, porta);
                 PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
                 BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-
+                DataInputStream din=new DataInputStream(socket.getInputStream());
+                DataOutputStream dout=new DataOutputStream(socket.getOutputStream());
+                
+                
                 BufferedReader brEntrada = new BufferedReader(new InputStreamReader(System.in));
                 String servidorMsg = "Conexão Estabelecida";
                 String usuarioMsg = "10,123";
@@ -77,6 +85,11 @@ public class Client {
                 //if (usuarioMsg != null) {
                 //    out.println(usuarioMsg);
                 //}
+                System.out.println("Enviando imagem...");
+                out.flush();
+                BufferedImage bufferedImage = ImageIO.read(new File("print.png"));
+                ImageIO.write(bufferedImage, "png", dout);
+                
                 servidorMsg = in.readLine();
                 System.out.println("Servidor: "+servidorMsg);
                 //elapsed = System.currentTimeMillis() - start;
@@ -113,6 +126,7 @@ public class Client {
                  */
             } catch (IOException e) {
                 System.out.println("Impossível conectar com o servidor!");
+                e.printStackTrace();
                 System.exit(1);
             }
     

@@ -8,11 +8,13 @@ package br.com.ClientServer;
 import br.com.ClientServer.Exceptions.Excecao;
 import br.com.ConexaoBanco.ConexaoMySQL;
 import br.com.View.AnimalEncontrado;
+import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
+import javax.imageio.ImageIO;
 
 /**
  *
@@ -48,6 +50,11 @@ public class ServerThread extends Thread {
             System.out.println("\nMensagem do usuário: "+usuarioMsg);
             String[] parts = usuarioMsg.split(",");
             //out.println(servidorMsg);
+            
+            BufferedImage img = ImageIO.read(ImageIO.createImageInputStream(_socket.getInputStream()));
+            System.out.println("Imagem Recebida!");
+            System.out.println(img);
+            
             ConexaoMySQL con = new ConexaoMySQL(parts[0], parts[1]);
             
             if(con.buscaSenha()){
