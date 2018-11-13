@@ -5,6 +5,9 @@
  */
 package br.com.ConexaoBanco;
 
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -12,6 +15,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Date;
+import javax.imageio.ImageIO;
 
 /**
  *
@@ -21,13 +25,15 @@ public class ConexaoMySQL {
 
     private String _idEquipamento;
     private String _senhaEquipamento;
+    private BufferedImage _img;
 
-    public ConexaoMySQL(String idEquipamento, String senhaEquipamento) {
+    public ConexaoMySQL(String idEquipamento, String senhaEquipamento, BufferedImage img) {
         _idEquipamento = idEquipamento;
         _senhaEquipamento = senhaEquipamento;
+        _img = img;
     }
     
-    public boolean buscaSenha(){
+    public boolean buscaSenha() throws IOException{
         Connection connection = null;
         
         try {
@@ -71,7 +77,7 @@ public class ConexaoMySQL {
         return true;
     }
 
-    public boolean conexaoMySQL() {
+    public boolean conexaoMySQL() throws IOException {
 
         Connection connection = null;
 
@@ -107,11 +113,18 @@ public class ConexaoMySQL {
         }
     }
 
-    public boolean insereDados(Connection connection) {
+    public boolean insereDados(Connection connection) throws IOException {
         try {
             System.out.println("Inserindo dados no banco...\n");
-            Statement stmt = connection.createStatement();
-            stmt.executeUpdate("insert into alertas (id_equipamento) values ('" + _idEquipamento + "')");
+            System.out.println("SENHA DO EQUIP: " + _idEquipamento);
+            byte[] imageInByte = bfToByte();
+            String sql = "INSERT INTO alertas (id_equipamento, imagem) VALUES (?, ?)";
+            PreparedStatement pstm = connection.prepareStatement(sql);
+            pstm.setString(1, _idEquipamento);
+            pstm.setBytes(2, imageInByte);
+            pstm.executeUpdate();
+            //Statement stmt = connection.createStatement();
+            //stmt.executeUpdate("insert into alertas (id_equipamento) values ('" + _idEquipamento + "')");
             if(fechaConexao(connection)){
                 return true;
             }
@@ -120,6 +133,7 @@ public class ConexaoMySQL {
             }
         } catch (SQLException e) {
             System.out.println("Erro ao inserir os dados no banco :(");
+            e.printStackTrace();
             fechaConexao(connection);
             return false;
         }
@@ -134,5 +148,12 @@ public class ConexaoMySQL {
             System.out.println("Impossível fechar a conexão com o banco!\n");
             return false;
         }
+    }
+    
+    public byte[] bfToByte() throws IOException{
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        ImageIO.write(_img, "png", baos);
+        byte[] imageInByte = baos.toByteArray();
+        return imageInByte;
     }
 }

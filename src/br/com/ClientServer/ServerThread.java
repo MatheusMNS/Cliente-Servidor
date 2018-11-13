@@ -55,7 +55,7 @@ public class ServerThread extends Thread {
             System.out.println("Imagem Recebida!");
             System.out.println(img);
             
-            ConexaoMySQL con = new ConexaoMySQL(parts[0], parts[1]);
+            ConexaoMySQL con = new ConexaoMySQL(parts[0], parts[1], img);
             
             if(con.buscaSenha()){
                 out.println("OK");

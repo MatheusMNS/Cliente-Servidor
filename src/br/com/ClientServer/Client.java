@@ -75,7 +75,7 @@ public class Client {
                 
                 BufferedReader brEntrada = new BufferedReader(new InputStreamReader(System.in));
                 String servidorMsg = "Conexão Estabelecida";
-                String usuarioMsg = "10,123";
+                String usuarioMsg = "8,123";
                 //msgCifrada = hash(usuarioMsg);
 
                 System.out.println("\nEnviando Mensagem: "+usuarioMsg.toString());
@@ -87,7 +87,7 @@ public class Client {
                 //}
                 System.out.println("Enviando imagem...");
                 out.flush();
-                BufferedImage bufferedImage = ImageIO.read(new File("print.png"));
+                BufferedImage bufferedImage = ImageIO.read(new File("capivara.png"));
                 ImageIO.write(bufferedImage, "png", dout);
                 
                 servidorMsg = in.readLine();
